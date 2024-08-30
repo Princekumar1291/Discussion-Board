@@ -1,0 +1,27 @@
+Why Project is important
+• Practice after learning from tutorial
+• Learn how to make project structure
+• Learn how to manage multiple features
+• You will get code of this project on github
+• You will feel more confidence and ready for projects
+
+Project introduction
+• Project name is"discussion board."
+• User can ask que and answer of questions
+• Features
+• Signup and login.
+• Post Questions.
+• Like and answer Questions.
+• Display Related Questions.
+• We will use Database and Bootstrap.
+• We will learn how to manage project structure.
+• Much more...
+
+
+
+Project Introduction
+• Install Xampp for install PHP and My PL
+• We will use bootstrap for Style and UI.
+• PhpMyAdmin for manage database.
+• VS code for write code.
+• Github for code
