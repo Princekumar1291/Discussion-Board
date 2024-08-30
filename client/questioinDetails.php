@@ -1,3 +1,4 @@
+
 <?php
 include("common/db.php");
 ?>
@@ -52,26 +53,38 @@ include("common/db.php");
 			text-decoration: none;
 			font-weight: bold;
 			transition: color 0.2s ease-in-out;
-			font-size: 20px;
+			font-size: 25px;
 		}
-		
 		.question-link a:hover {
 			color: #23527c;
 		}
+    .quelink{
+      font-weight: bold;
+      font-size: 25px;
+    }
 	</style>
 </head>
 <body>
 	<div class="container">
-		<h1 class="text-center">Questions</h1>
-		<?php
-		$sql="SELECT * FROM questions";
-		$questions=$conn->query($sql);
-		foreach ($questions as $question) {
-			echo "<div class='question-link'>";
-			echo "<a href='?que-id={$question['id']}'>" . $question['title'] .'?'. "</a>";
-			echo "</div>";
-		}
-		?>
+		<h1>Questions</h1>
+		<div class='question-link'>
+      <?php 
+        include("common/db.php");
+        $id = $_GET['que-id'];
+        $sql="select * from questions where id=:id";
+        $quest=$conn->prepare($sql);
+        $quest->bindParam(':id',$id);
+        $quest->execute();
+        $result=$quest->fetch();
+        echo '<div class="quelink"> Q  '.$result['title'].'?</div>';
+        echo "<br>";
+        echo $result['description'];
+      ?>
+    </div>
+    <form action="server/request.php" method="post">
+      <textarea name="description" id="description" rows="4" class="form-control mt-3 mb-3 " placeholder="write your answer..."></textarea>
+      <button type="submit" class="btn btn-primary" name="answer">Answer Post</button>
+    </form>
 	</div>
 </body>
 </html>

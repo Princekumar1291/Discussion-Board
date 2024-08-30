@@ -14,7 +14,7 @@
   session_start();
   
   include("./client/header.php");
-  include("./client/questions.php");
+  
 
   if(isset($_GET['signup']) && !isset($_SESSION['user']['name'])){
     include("./client/signup.php");
@@ -24,6 +24,12 @@
   }
   else if(isset($_GET['ask']) && isset($_SESSION['user']['name'])){
     include("./client/ask.php");
+  }
+  else if(isset($_GET['que-id'])){
+    include("./client/questioinDetails.php");
+  }
+  else{
+    include("./client/questions.php");
   }
   ?>
 </body>
