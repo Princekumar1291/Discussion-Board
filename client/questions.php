@@ -12,25 +12,33 @@ include("common/db.php");
 			font-family: Arial, sans-serif;
 			background-color: #f9f9f9;
 		}
-		
+
 		.container {
-			max-width: 80%; /* Increased width to 80% of device width */
+			max-width: 80%;
 			margin: 40px auto;
 			padding: 20px;
 			background-color: #fff;
 			border: 1px solid #ddd;
 			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			display: flex;
+			flex-wrap: wrap; /* Ensures responsiveness */
 		}
-		
-		.text-center {
-			text-align: center;
+
+		.questions-container {
+			flex: 3; /* This will take up 75% of the container width */
+			margin-right: 20px;
 		}
-		
+
+		.categories-container {
+			flex: 1; /* This will take up 25% of the container width */
+			max-width: 250px; /* Optional: you can limit the max width of the category section */
+		}
+
 		h1 {
 			color: #333;
 			margin-bottom: 20px;
 		}
-		
+
 		.question-link {
 			display: block;
 			margin: 20px 0;
@@ -41,12 +49,12 @@ include("common/db.php");
 			box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 			transition: background-color 0.2s ease-in-out;
 		}
-		
+
 		.question-link:hover {
 			background-color: #f2f2f2;
 			text-decoration: none;
 		}
-		
+
 		.question-link a {
 			color: #337ab7;
 			text-decoration: none;
@@ -54,24 +62,50 @@ include("common/db.php");
 			transition: color 0.2s ease-in-out;
 			font-size: 20px;
 		}
-		
+
 		.question-link a:hover {
 			color: #23527c;
+		}
+
+		.categories-container h1 {
+			text-align: center;
+		}
+
+		/* Responsive Design */
+		@media (max-width: 768px) {
+			.container {
+				flex-direction: column;
+			}
+
+			.questions-container, 
+			.categories-container {
+				flex: 1;
+				margin-right: 0;
+				max-width: 100%;
+			}
 		}
 	</style>
 </head>
 <body>
 	<div class="container">
-		<h1 class="text-center">Questions</h1>
-		<?php
-		$sql="SELECT * FROM questions";
-		$questions=$conn->query($sql);
-		foreach ($questions as $question) {
-			echo "<div class='question-link'>";
-			echo "<a href='?que-id={$question['id']}'>" . $question['title'] .'?'. "</a>";
-			echo "</div>";
-		}
-		?>
+		<div class="questions-container">
+			<h1>Questions</h1>
+			<?php
+			$sql="SELECT * FROM questions";
+			$questions=$conn->query($sql);
+			foreach ($questions as $question) {
+				echo "<div class='question-link'>";
+				echo "<a href='?que-id={$question['id']}'>" . $question['title'] .'?'. "</a>";
+				echo "</div>";
+			}
+			?>
+		</div>
+		<div class="categories-container">
+			<h1>Categories</h1>
+			<?php
+			include("categorylist.php");
+			?>
+		</div>
 	</div>
 </body>
 </html>

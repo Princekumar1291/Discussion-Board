@@ -46,10 +46,12 @@ else if(isset($_POST['login'])){
     echo "Invalid email or password";
   }
 }
+
 else if(isset($_GET['logout'])){
   unset($_SESSION['user']);
   header("location:../index.php");
 }
+
 else if(isset($_POST['ask']) && isset($_SESSION['user']['name'])){
   // print_r($_POST);
   $title=$_POST['title'];
@@ -70,6 +72,20 @@ else if(isset($_POST['ask']) && isset($_SESSION['user']['name'])){
   $userSubmit->execute();
   if ($userSubmit) {
     echo "<script>alert('Question submitted successfully'); window.location.href = '../index.php';</script>";
+  } else {
+      echo "<script>alert('Data not inserted');</script>";
+  }
+}
+
+else if(isset($_POST['answer'])){
+  $sql="INSERT INTO answers(answer,userId,questionId) VALUES (:answer,:userId,:questionId)";
+  $userSubmit=$conn->prepare($sql);
+  $userSubmit->bindParam(':answer',$_POST['description']);
+  $userSubmit->bindParam(':userId',$_SESSION['user']['id']);
+  $userSubmit->bindParam(':questionId',$_POST['questionId']);
+  $userSubmit->execute();
+  if ($userSubmit) {
+    echo "<script>alert('Answer submitted successfully'); window.location.href = '../index.php?que-id=" . $_POST['questionId'] . "';</script>";
   } else {
       echo "<script>alert('Data not inserted');</script>";
   }
