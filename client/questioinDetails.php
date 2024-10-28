@@ -19,6 +19,17 @@ include("common/db.php");
 			background-color: #fff;
 			border: 1px solid #ddd;
 			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			display: flex;
+			flex-wrap: wrap;
+		}
+
+		.main-content {
+			flex: 3;
+			margin-right: 20px;
+		}
+
+		.related-questions {
+			flex: 2;
 		}
 		
 		h1 {
@@ -28,7 +39,7 @@ include("common/db.php");
 		}
 		
 		.question-link {
-			margin: 20px 0;
+			margin: 20px 10px 20px 0;
 			padding: 15px;
 			background-color: #f7f7f7;
 			border: 1px solid #ddd;
@@ -110,45 +121,84 @@ include("common/db.php");
 		button:hover {
 			background-color: #286090;
 		}
+
+		/* Added new styles for related questions text */
+		.related-questions .question-link a {
+			font-size: 16px; /* Decreased from 25px */
+		}
+
+		.related-questions h2 {
+			font-size: 20px; /* Smaller heading */
+		}
+
+		@media (max-width: 768px) {
+			.container {
+				flex-direction: column;
+			}
+			.main-content,
+			.related-questions {
+				flex: 1;
+				margin-right: 0;
+			}
+		}
 	</style>
 </head>
 <body>
 	<div class="container">
-		<h1>Questions</h1>
-		<div class='question-link'>
-			<?php 
-				include("common/db.php");
-				$id = $_GET['que-id'];
-				$sql="select * from questions where id=:id";
-				$quest=$conn->prepare($sql);
-				$quest->bindParam(':id',$id);
-				$quest->execute();
-				$result=$quest->fetch();
-				echo '<div class="quelink">Q '.$result['title'].'?</div>';
-				echo "<br>";
-				echo $result['description'];
-			?>
-		</div>
-		<form action="server/request.php" method="post">
-			<input type="hidden" name="questionId" value="<?=$result['id'] ?>">
-			<textarea name="description" id="description" rows="4" placeholder="Write your answer..."></textarea>
-			<button type="submit" name="answer">Post Answer</button>
-		</form>
-		<div class="answer-container">
-			<?php
-			$queId=$result['id'];
-			$sql="select * from answers where questionId=:id";
-			$ans=$conn->prepare($sql);
-			$ans->bindParam(':id',$queId);
-			$ans->execute();
-			$result=$ans->fetchAll();
-			$result= array_reverse($result);
+		<div class="main-content">
+			<h1>Question Details</h1>
+			<div class='question-link'>
+				<?php 
+					include("common/db.php");
+					$id = $_GET['que-id'];
+					$sql="select * from questions where id=:id";
+					$quest=$conn->prepare($sql);
+					$quest->bindParam(':id',$id);
+					$quest->execute();
+					$result=$quest->fetch();
+					$categoryId = $result['categoryId'];
+					echo '<div class="quelink">Q '.$result['title'].'?</div>';
+					echo "<br>";
+					echo $result['description'];
+				?>
+			</div>
+			<form action="server/request.php" method="post">
+				<input type="hidden" name="questionId" value="<?=$result['id'] ?>">
+				<textarea name="description" id="description" rows="4" placeholder="Write your answer..."></textarea>
+				<button type="submit" name="answer">Post Answer</button>
+			</form>
+			<div class="answer-container">
+				<?php
+				$queId=$result['id'];
+				$sql="select * from answers where questionId=:id";
+				$ans=$conn->prepare($sql);
+				$ans->bindParam(':id',$queId);
+				$ans->execute();
+				$result=$ans->fetchAll();
+				$result= array_reverse($result);
 
-			echo "<h2>Answers</h2>";
-			foreach ($result as $key => $value) {
-				echo '<div class="answer">';
-				echo '<div class="answer-text">'.$value['answer'].'</div>';
-				echo '</div>';
+				echo "<h2>Answers</h2>";
+				foreach ($result as $key => $value) {
+					echo '<div class="answer">';
+					echo '<div class="answer-text">'.$value['answer'].'</div>';
+					echo '</div>';
+				}
+				?>
+			</div>
+		</div>
+		<div class="related-questions">
+			<h1>Related Questions</h1>
+			<?php
+			$sql = "SELECT * FROM questions WHERE categoryId=:categoryId AND id != :currentId";
+			$relatedQuestions = $conn->prepare($sql);
+			$relatedQuestions->bindParam(':categoryId', $categoryId);
+			$relatedQuestions->bindParam(':currentId', $id);
+			$relatedQuestions->execute();
+			
+			foreach ($relatedQuestions as $question) {
+				echo "<div class='question-link'>";
+				echo "<a href='?que-id={$question['id']}'>" . $question['title'] . '?' . "</a>";
+				echo "</div>";
 			}
 			?>
 		</div>

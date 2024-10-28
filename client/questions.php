@@ -74,7 +74,7 @@ include("common/db.php");
 		/* Responsive Design */
 		@media (max-width: 768px) {
 			.container {
-				flex-direction: column;
+				flex-direction: column-reverse;
 			}
 
 			.questions-container, 
@@ -91,7 +91,18 @@ include("common/db.php");
 		<div class="questions-container">
 			<h1>Questions</h1>
 			<?php
-			$sql="SELECT * FROM questions";
+			if(isset($_GET['category_id'])){
+				$sql="SELECT * FROM questions WHERE categoryId={$_GET['category_id']}";
+			}
+			else if(isset($_GET['my-question'])){
+				$sql="SELECT * FROM questions WHERE userId={$_GET['my-question']}";
+			}
+			else if(isset($_GET['latest-question'])){
+				$sql="SELECT * FROM questions ORDER BY id DESC";
+			}
+			else{
+				$sql="SELECT * FROM questions";
+			}
 			$questions=$conn->query($sql);
 			foreach ($questions as $question) {
 				echo "<div class='question-link'>";

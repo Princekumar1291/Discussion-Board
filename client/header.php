@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-sm navbar-light bg-light">
   <div class="container-fluid">
     <a class="navbar-brand" href="index.php">
       <img src="public/pngwing.com.png" alt="" width="30">
@@ -34,7 +34,12 @@
           <a class="nav-link" href="#">Category</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Latest Question</a>
+          <a class="nav-link" href="?latest-question=true">Latest Question</a>
+        </li>
+        <li class="nav-item">
+          <?php if(isset($_SESSION['user']['id'])): ?>
+          <a class="nav-link" href="?my-question=<?php echo $_SESSION['user']['id']; ?>">My Question</a>
+          <?php endif; ?>
         </li>
       </ul>
     </div>

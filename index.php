@@ -17,7 +17,6 @@
   
   include("./client/header.php");
   
-
   if(isset($_GET['signup']) && !isset($_SESSION['user']['name'])){
     include("./client/signup.php");
   }
@@ -29,6 +28,15 @@
   }
   else if(isset($_GET['que-id'])){
     include("./client/questioinDetails.php");
+  }
+  else if(isset($_GET['category_id'])){
+    include("./client/questions.php");
+  }
+  else if(isset($_GET['my-question'])){
+    include("./client/questions.php");
+  }
+  else if(isset($_GET['latest-question'])){
+    include("./client/questions.php");
   }
   else{
     include("./client/questions.php");
