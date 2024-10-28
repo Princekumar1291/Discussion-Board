@@ -40,7 +40,9 @@ include("common/db.php");
 		}
 
 		.question-link {
-			display: block;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
 			margin: 20px 0;
 			padding: 10px;
 			background-color: #f7f7f7;
@@ -69,6 +71,19 @@ include("common/db.php");
 
 		.categories-container h1 {
 			text-align: center;
+		}
+
+		.delete-btn {
+			padding: 5px 10px;
+			background-color: #dc3545;
+			color: white;
+			border: none;
+			border-radius: 3px;
+			cursor: pointer;
+		}
+
+		.delete-btn:hover {
+			background-color: #c82333;
 		}
 
 		/* Responsive Design */
@@ -100,6 +115,9 @@ include("common/db.php");
 			else if(isset($_GET['latest-question'])){
 				$sql="SELECT * FROM questions ORDER BY id DESC";
 			}
+			else if(isset($_GET['search'])){
+				$sql="SELECT * FROM questions WHERE title LIKE '%{$_GET['search']}%'";
+			}
 			else{
 				$sql="SELECT * FROM questions";
 			}
@@ -107,6 +125,12 @@ include("common/db.php");
 			foreach ($questions as $question) {
 				echo "<div class='question-link'>";
 				echo "<a href='?que-id={$question['id']}'>" . $question['title'] .'?'. "</a>";
+				if(isset($_GET['my-question'])) {
+					echo "<form action='server/request.php' method='POST' style='margin:0;'>";
+					echo "<input type='hidden' name='question_id' value='{$question['id']}'>";
+					echo "<button type='submit' name='delete_question' class='delete-btn'>Delete</button>";
+					echo "</form>";
+				}
 				echo "</div>";
 			}
 			?>

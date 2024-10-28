@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-sm navbar-light bg-light">
+<nav class="navbar navbar-expand-sm navbar-light bg-light flex-row">
   <div class="container-fluid">
     <a class="navbar-brand" href="index.php">
       <img src="public/pngwing.com.png" alt="" width="30">
@@ -7,7 +7,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
+      <ul class="navbar-nav me-auto">
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="index.php">Home</a>
         </li>
@@ -40,8 +40,12 @@
           <?php if(isset($_SESSION['user']['id'])): ?>
           <a class="nav-link" href="?my-question=<?php echo $_SESSION['user']['id']; ?>">My Question</a>
           <?php endif; ?>
-        </li>
+        </li>    
       </ul>
+      <form class="d-flex ms-auto" action="" method="GET">
+        <input class="form-control me-2" type="search" name="search" placeholder="Search questions..." >
+        <button class="btn btn-outline-primary" type="submit">Search</button>
+      </form>
     </div>
   </div>
 </nav>

@@ -1,3 +1,30 @@
+<?php
+include("common/db.php");
+
+if(isset($_POST['email']) && isset($_POST['password'])) {
+  $email = $_POST['email'];
+  $password = $_POST['password'];
+  
+  $sql = "SELECT * FROM users WHERE email = :email AND password = :password";
+  $stmt = $conn->prepare($sql);
+  $stmt->bindParam(':email', $email);
+  $stmt->bindParam(':password', $password);
+  $stmt->execute();
+  
+  if($stmt->rowCount() > 0) {
+    $user = $stmt->fetch();
+    $_SESSION['user'] = [
+      'id' => $user['id'],
+      'name' => $user['name'],
+      'email' => $user['email']
+    ];
+    header("Location: index.php");
+    exit();
+  } else {
+    echo "<script>alert('Invalid email or password');</script>";
+  }
+}
+?>
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-6">
@@ -6,7 +33,7 @@
           <h3>Log In</h3>
         </div>
         <div class="card-body">
-          <form action="server/request.php" method="POST">
+          <form action="" method="POST">
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
               <input type="email" class="form-control" id="email" name="email" required>

@@ -38,6 +38,9 @@
   else if(isset($_GET['latest-question'])){
     include("./client/questions.php");
   }
+  else if(isset($_GET['search'])){
+    include("./client/questions.php");
+  }
   else{
     include("./client/questions.php");
   }

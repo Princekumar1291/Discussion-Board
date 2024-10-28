@@ -77,6 +77,22 @@ else if(isset($_POST['ask']) && isset($_SESSION['user']['name'])){
   }
 }
 
+else if(isset($_POST['delete_question'])){
+  // First delete all answers for this question
+  $deleteAnswers = "DELETE FROM answers WHERE questionId=:id";
+  $stmt = $conn->prepare($deleteAnswers);
+  $stmt->bindParam(':id', $_POST['question_id']);
+  $stmt->execute();
+
+  // Then delete the question itself
+  $sql = "DELETE FROM questions WHERE id=:id";
+  $stmt = $conn->prepare($sql);
+  $stmt->bindParam(':id', $_POST['question_id']);
+  $stmt->execute();
+  
+  header("Location: ../index.php?my-question=" . $_SESSION['user']['id']);
+}
+
 else if(isset($_POST['answer'])){
   $sql="INSERT INTO answers(answer,userId,questionId) VALUES (:answer,:userId,:questionId)";
   $userSubmit=$conn->prepare($sql);
